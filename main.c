@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include "agent.h"
+#include "inference.h"
 #include "env.h"
 
 int main(){
@@ -23,6 +23,8 @@ int main(){
         printf("Score atual: %d \n", A.score);
         printSimulation(A,E);
         sense(A);
+        inferHoles(&A, &E);
+        inferMonsters(&A, &E);
         printf("Para onde você deseja se mover? \n");
         scanf(" %c",&mov);
         if (mov=='b'){
@@ -47,6 +49,7 @@ int main(){
         }
     }
     printf("Score final: %d \n",A.score);
+    free(A.knowledgeBase);
 
     return 0;
 }

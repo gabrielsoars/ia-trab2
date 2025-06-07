@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "agent.h"
+#include "inference.h"
 
 agent newAgent(enviroment E){
     agent A;
@@ -9,14 +10,17 @@ agent newAgent(enviroment E){
     A.temFlecha = true;
     A.onde = &E.grid[0][0];
     A.comOuro = false;
+    A.knowledgeBase = newKnowledgeBase(E);
     return A;
 }
 
 void sense(agent A){
     if (A.onde->S.cheiro){
+        A.knowledgeBase[A.onde->row][A.onde->col].cheiro = true;
         printf("Aqui há um cheiro monstruoso. \n");
     }
     if (A.onde->S.vento){
+        A.knowledgeBase[A.onde->row][A.onde->col].vento = true;
         printf("Aqui está batendo um vento estranho. \n");
     }
 }
@@ -29,18 +33,22 @@ bool move(agent* A, enviroment E, place* target){
     if (isNeighbor(*A->onde,*target)){
         A->onde = target;
         A->score--;
+        A->knowledgeBase[A->onde->row][A->onde->col].visitado = true;
         if (A->onde->monstro){
             if (A->temFlecha){
                 printf("Matou o monstro. \n");
                 A->score -= 10;
                 A->onde->monstro = false;
+                A->knowledgeBase[A->onde->row][A->onde->col].monstro = false;
             }
             else{
+                A->knowledgeBase[A->onde->row][A->onde->col].monstro = true;
                 printf("Pego pelo monstro.\n");
                 A->score -= 1000;
             }
         }
         if (A->onde->buraco){
+            A->knowledgeBase[A->onde->row][A->onde->col].buraco = true;
             printf("Caiu no buraco. \n");
             A->score -= 1000;
         }
@@ -59,8 +67,18 @@ bool move(agent* A, enviroment E, place* target){
 void printSimulation(agent A, enviroment E){
     for (int i=0; i<E.h; i++){
         for (int j=0; j<E.w; j++){
+            place current = E.grid[i][j];
             if (&E.grid[i][j]==A.onde){
                 printf("O ");
+            }
+            else if (current.buraco) {
+                printf("+ ");
+            }
+            else if (current.monstro){
+                printf("# ");
+            }
+            else if (current.ouro){
+                printf("$ ");
             }
             else{
                 printf("_ ");
