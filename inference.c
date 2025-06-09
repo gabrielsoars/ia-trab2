@@ -35,7 +35,7 @@ void inferHoles(agent * A, enviroment * E){
             int x = v + dx[d];
             int y = w + dy[d];
 
-            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && (A->knowledgeBase[x][y].vento) && (x != i && y != j)){
+            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && (A->knowledgeBase[x][y].vento) && (!(x == i && y == j))){
                 A->knowledgeBase[v][w].buraco = true;
                 printf("-------------------- Há um buraco em (%d, %d)\n", v, w);
                 break;
@@ -76,7 +76,7 @@ void inferMonsters(agent * A, enviroment * E){
             int x = v + dx[d];
             int y = w + dy[d];
 
-            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && (A->knowledgeBase[x][y].cheiro) && (x != i && y != j)){
+            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && (A->knowledgeBase[x][y].cheiro) && (!(x == i && y == j))){
                 A->knowledgeBase[v][w].monstro = true;
                 printf("-------------------- Há um monstro em (%d, %d)\n", v, w);
                 break;
