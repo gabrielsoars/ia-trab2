@@ -51,46 +51,13 @@ void delEnviroment(enviroment* E){
 
 void initEnviroment(enviroment E, int numBuraco, int numMonstro){
 /*
-    Inicializa sujeiras no ambiente.
+    Inicializa grid de teste.
 */
-    srand(time(NULL));
-    //Inicializa buracos
-    while (numBuraco>0){
-        int i, j;
-        i = rand()%E.h;
-        j = rand()%E.w;
-        if (i!=0 && i!=E.h-1 && j!=0 && j!=E.w-1){
-            if (!E.grid[i][j].buraco){
-                E.grid[i][j].buraco = true;
-                numBuraco--;
-            }
-        }
-    }
-    //Inicializa monstros
-    while (numMonstro>0){
-        int i, j;
-        i = rand()%E.h;
-        j = rand()%E.w;
-        if (i!=0 && i!=E.h-1 && j!=0 && j!=E.w-1){
-            if (!E.grid[i][j].buraco && !E.grid[i][j].monstro){
-                E.grid[i][j].monstro = true;
-                numMonstro--;
-            }
-        }
-    }
-    //Inicializa ouro
-    bool gold=false;
-    while (!gold){
-        int i, j;
-        i = rand()%E.h;
-        j = rand()%E.w;
-        if (i!=0 && i!=E.h-1 && j!=0 && j!=E.w-1){
-            if (!E.grid[i][j].buraco && !E.grid[i][j].monstro ){
-                E.grid[i][j].ouro = true;
-                gold = true;
-            }
-        }
-    }
+    E.grid[1][1].monstro = true;
+    E.grid[2][1].buraco = true;
+    E.grid[2][3].buraco = true;
+    E.grid[3][3].buraco = true;
+    E.grid[3][1].ouro = true;
     initSensations(E);
 }
 

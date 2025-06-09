@@ -7,5 +7,6 @@
 void inferHoles(agent * A, enviroment * E);
 void inferMonsters(agent * A, enviroment * E);
 knowledge ** newKnowledgeBase(enviroment E);
+place *inferBestMove(agent *A, enviroment *E);
 
 #endif

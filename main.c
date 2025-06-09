@@ -4,8 +4,10 @@
 #include "env.h"
 
 int main(){
+    int m = 5;
+    int n = 5;
 
-    enviroment E = newEnviroment(5,5);
+    enviroment E = newEnviroment(m, n);
     int numBuraco = 3; int numMonstro = 1;
     initEnviroment(E,numBuraco,numMonstro);
     agent A = newAgent(E);
@@ -19,34 +21,18 @@ int main(){
     printf("Você começa na posição (0,0). Boa sorte! \n");
 
     char mov;
-    while(!(A.comOuro && A.onde->row==E.h-1 && A.onde->col==E.w-1)){
+
+    int maxMoves = 10 * (m * n);
+    int countMoves = 0;
+    while((!(A.comOuro && A.onde->row==E.h-1 && A.onde->col==E.w-1)) && (countMoves < maxMoves)){
         printf("Score atual: %d \n", A.score);
         printSimulation(A,E);
         sense(A);
-        inferHoles(&A, &E);
-        inferMonsters(&A, &E);
+        place * melhorMov = inferBestMove(&A, &E);
+        printf("Mova-se para: (%d, %d)\n", melhorMov->row, melhorMov->col);
         printf("Para onde você deseja se mover? \n");
-        scanf(" %c",&mov);
-        if (mov=='b'){
-            if (A.onde->row<E.h-1){
-                move(&A,E,&E.grid[A.onde->row+1][A.onde->col]);
-            }
-        }
-        if (mov=='c'){
-            if (A.onde->row>0){
-                move(&A,E,&E.grid[A.onde->row-1][A.onde->col]);
-            }
-        }
-        if (mov=='d'){
-            if (A.onde->col<E.w-1){
-                move(&A,E,&E.grid[A.onde->row][A.onde->col+1]);
-            }
-        }
-        if (mov=='e'){
-            if (A.onde->col>0){
-                move(&A,E,&E.grid[A.onde->row][A.onde->col-1]);
-            }
-        }
+        move(&A, E, melhorMov);
+        countMoves++;
     }
     printf("Score final: %d \n",A.score);
     free(A.knowledgeBase);

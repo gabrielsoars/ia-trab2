@@ -103,3 +103,49 @@ knowledge ** newKnowledgeBase(enviroment E){
     }
     return matriz;
 }
+
+place *inferBestMove(agent *A, enviroment *E) {
+    int i = A->onde->row;
+    int j = A->onde->col;
+
+    int dx[] = {-1, 1, 0, 0}; // c, b, e, d
+    int dy[] = {0, 0, -1, 1};
+
+    inferHoles(A, E);
+    inferMonsters(A, E);
+
+    place *melhorOpcao = NULL;
+
+    // 1. Primeiro, procurar vizinhos não visitados e seguros
+    for (int d = 0; d < 4; d++) {
+        int ni = i + dx[d];
+        int nj = j + dy[d];
+
+        if (ni >= 0 && ni < E->h && nj >= 0 && nj < E->w) {
+            knowledge k = A->knowledgeBase[ni][nj];
+
+            if (!k.visitado && !k.buraco && !k.monstro) {
+                melhorOpcao = &E->grid[ni][nj];
+                return melhorOpcao; // Prioriza a primeira posição segura e não visitada
+            }
+        }
+    }
+
+    // 2. Se não houver posições seguras e não visitadas, procurar vizinhos visitados e seguros
+    for (int d = 0; d < 4; d++) {
+        int ni = i + dx[d];
+        int nj = j + dy[d];
+
+        if (ni >= 0 && ni < E->h && nj >= 0 && nj < E->w) {
+            knowledge k = A->knowledgeBase[ni][nj];
+
+            if (k.visitado && !k.buraco && !k.monstro) {
+                melhorOpcao = &E->grid[ni][nj];
+                // Não retorna imediatamente, pois pode haver mais de uma opção segura
+                // Se quiser priorizar alguma heurística adicional, pode ser feito aqui
+            }
+        }
+    }
+
+    return melhorOpcao; // Pode ser NULL se não houver jogadas seguras
+}
