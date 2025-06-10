@@ -47,11 +47,17 @@ bool move(agent* A, enviroment E, place* target){
                 A->score -= 1000;
             }
         }
+        else
+            A->knowledgeBase[A->onde->row][A->onde->col].monstro = false;
+
         if (A->onde->buraco){
             A->knowledgeBase[A->onde->row][A->onde->col].buraco = true;
             printf("Caiu no buraco. \n");
             A->score -= 1000;
         }
+        else
+            A->knowledgeBase[A->onde->row][A->onde->col].buraco = false;
+
         if (A->onde->ouro){
             printf("O ouro está aqui! \n");
             A->comOuro = true;
