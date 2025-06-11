@@ -20,7 +20,10 @@ void inferHoles(agent * A, enviroment * E){
         int v = i + dx[d];
         int w = j + dy[d];
 
-        if ((v >= 0 && v < E->h && w >= 0 && w < E->w) && (!A->knowledgeBase[v][w].visitado)){
+        if ((v >= 0 && v < E->h && w >= 0 && w < E->w) && 
+            (!A->knowledgeBase[v][w].visitado) && 
+            ((!(v == 0 && w == 0)) && (!(v == (E->h - 1) && w == (E->w - 1)))))
+        {
             possiveisBuracos[count][0] = v;
             possiveisBuracos[count][1] = w;
             count++;
@@ -35,7 +38,10 @@ void inferHoles(agent * A, enviroment * E){
             int x = v + dx[d];
             int y = w + dy[d];
 
-            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && (A->knowledgeBase[x][y].vento) && (!(x == i && y == j))){
+            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && 
+                (A->knowledgeBase[x][y].vento) && 
+                ((!(x == i && y == j)) && (!(x == 0 && y == 0)) && (!(x == (E->h - 1) && y == (E->w - 1)))))
+            {
                 A->knowledgeBase[v][w].buraco = true;
                 printf("-------------------- Há um buraco em (%d, %d)\n", v, w);
                 break;
@@ -61,7 +67,10 @@ void inferMonsters(agent * A, enviroment * E){
         int v = i + dx[d];
         int w = j + dy[d];
 
-        if ((v >= 0 && v < E->h && w >= 0 && w < E->w) && (!A->knowledgeBase[v][w].visitado)){
+        if ((v >= 0 && v < E->h && w >= 0 && w < E->w) && 
+            (!A->knowledgeBase[v][w].visitado) && 
+            ((!(v == 0 && w == 0)) && (!(v == (E->h - 1) && w == (E->w - 1)))))
+        {
             possiveisMonstros[count][0] = v;
             possiveisMonstros[count][1] = w;
             count++;
@@ -76,7 +85,10 @@ void inferMonsters(agent * A, enviroment * E){
             int x = v + dx[d];
             int y = w + dy[d];
 
-            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && (A->knowledgeBase[x][y].cheiro) && (!(x == i && y == j))){
+            if ((x >= 0 && x < E->h && y >= 0 && y < E->w) && 
+                (A->knowledgeBase[x][y].cheiro) && 
+                ((!(x == i && y == j)) && (!(x == 0 && y == 0)) && (!(x == (E->h - 1) && y == (E->w - 1)))))
+            {
                 A->knowledgeBase[v][w].monstro = true;
                 printf("-------------------- Há um monstro em (%d, %d)\n", v, w);
                 break;
