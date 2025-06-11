@@ -136,9 +136,10 @@ place *inferBestMove(agent *A, enviroment *E) {
         if (ni >= 0 && ni < E->h && nj >= 0 && nj < E->w) {
             knowledge k = A->knowledgeBase[ni][nj];
 
-            if (!k.visitado && !k.buraco && !k.monstro) {
+            if ((!k.visitado) || ((isSafeFromHoles(A, E, ni, nj) && isSafeFromMonsters(A, E, ni, nj))))
+            {
                 melhorOpcao = &E->grid[ni][nj];
-                return melhorOpcao; // Prioriza a primeira posição segura e não visitada
+                return melhorOpcao;
             }
         }
     }
@@ -160,4 +161,38 @@ place *inferBestMove(agent *A, enviroment *E) {
     }
 
     return melhorOpcao; // Pode ser NULL se não houver jogadas seguras
+}
+
+bool isSafeFromHoles(agent * A, enviroment * E, int i, int j){
+    int dx[] = {-1, 1, 0, 0}; // c, b, e, d
+    int dy[] = {0, 0, -1, 1};
+
+    for (int d = 0; d < 4; d++) {
+        int ni = i + dx[d];
+        int nj = j + dy[d];
+
+        if (ni >= 0 && ni < E->h && nj >= 0 && nj < E->w) {
+            knowledge k = A->knowledgeBase[ni][nj];
+
+            return ((k.visitado) && (!k.buraco) && (!k.vento));
+        }
+        return false;
+    }
+}
+
+bool isSafeFromMonsters(agent * A, enviroment * E, int i, int j){
+    int dx[] = {-1, 1, 0, 0}; // c, b, e, d
+    int dy[] = {0, 0, -1, 1};
+
+    for (int d = 0; d < 4; d++) {
+        int ni = i + dx[d];
+        int nj = j + dy[d];
+
+        if (ni >= 0 && ni < E->h && nj >= 0 && nj < E->w) {
+            knowledge k = A->knowledgeBase[ni][nj];
+
+            return ((k.visitado) && (!k.monstro) && (!k.cheiro));
+        }
+        return false;
+    }
 }
