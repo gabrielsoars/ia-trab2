@@ -3,12 +3,13 @@
 #include <stdbool.h>
 #include "inference.h"
 
-void inferHoles(agent * A, enviroment * E){
+bool inferHoles(agent * A, enviroment * E){
     int i = A->onde->row;
     int j = A->onde->col;
+    bool result = false;
 
     if (!A->knowledgeBase[i][j].vento)
-        return;
+        return false;
 
     int dx[] = {-1, 1, 0, 0};
     int dy[] = {0, 0, -1, 1};
@@ -44,18 +45,22 @@ void inferHoles(agent * A, enviroment * E){
             {
                 A->knowledgeBase[v][w].buraco = true;
                 printf("-------------------- Há um buraco em (%d, %d)\n", v, w);
+                result = true;
                 break;
             }
         }
     }
+
+    return result;
 }
 
-void inferMonsters(agent * A, enviroment * E){
+bool inferMonsters(agent * A, enviroment * E){
     int i = A->onde->row;
     int j = A->onde->col;
+    bool result = false;
 
     if (!A->knowledgeBase[i][j].cheiro)
-        return;
+        return false;
 
     int dx[] = {-1, 1, 0, 0};
     int dy[] = {0, 0, -1, 1};
@@ -91,10 +96,12 @@ void inferMonsters(agent * A, enviroment * E){
             {
                 A->knowledgeBase[v][w].monstro = true;
                 printf("-------------------- Há um monstro em (%d, %d)\n", v, w);
+                result = true;
                 break;
             }
         }
     }
+    return result;
 }
 
 knowledge ** newKnowledgeBase(enviroment E){
@@ -123,8 +130,8 @@ place *inferBestMove(agent *A, enviroment *E) {
     int dx[] = {-1, 1, 0, 0}; // c, b, e, d
     int dy[] = {0, 0, -1, 1};
 
-    inferHoles(A, E);
-    inferMonsters(A, E);
+    bool holeInferred = inferHoles(A, E);
+    bool monsterInferred = inferMonsters(A, E);
 
     place *melhorOpcao = NULL;
 
