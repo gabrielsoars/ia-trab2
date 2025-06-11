@@ -9,6 +9,6 @@ void inferMonsters(agent * A, enviroment * E);
 knowledge ** newKnowledgeBase(enviroment E);
 place *inferBestMove(agent *A, enviroment *E);
 bool isSafeFromHoles(agent * A, enviroment * E, int i, int j);
-bool isSafeFromHoles(agent * A, enviroment * E, int i, int j);
+bool isSafeFromMonsters(agent * A, enviroment * E, int i, int j);
 
 #endif
