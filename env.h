@@ -31,5 +31,11 @@ void initEnviroment(enviroment E, int numBuraco, int numMonstro);
 bool isNeighbor(place p, place q);
 place* getPlace(enviroment E, int i, int j);
 void initSensations(enviroment E);
+enviroment* generatePresets5x5();
+enviroment* generatePresets7x7();
+enviroment* generatePresets9x9();
+enviroment* generatePresets10x10();
+enviroment* generatePresets5x10();
+
 
 #endif

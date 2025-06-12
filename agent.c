@@ -11,6 +11,10 @@ agent newAgent(enviroment E){
     A.onde = &E.grid[0][0];
     A.comOuro = false;
     A.knowledgeBase = newKnowledgeBase(E);
+    A.contatoMonstro = 0;
+    A.matouMonstro = 0;
+    A.quedasBuracos = 0;
+    A.ganhou = false;
     return A;
 }
 
@@ -40,11 +44,14 @@ bool move(agent* A, enviroment E, place* target){
                 A->score -= 10;
                 A->onde->monstro = false;
                 A->knowledgeBase[A->onde->row][A->onde->col].monstro = false;
+                A->matouMonstro++;
+                A->temFlecha = false;
             }
             else{
                 A->knowledgeBase[A->onde->row][A->onde->col].monstro = true;
                 printf("Pego pelo monstro.\n");
                 A->score -= 1000;
+                A->contatoMonstro++;
             }
         }
         else
@@ -54,6 +61,7 @@ bool move(agent* A, enviroment E, place* target){
             A->knowledgeBase[A->onde->row][A->onde->col].buraco = true;
             printf("Caiu no buraco. \n");
             A->score -= 1000;
+            A->quedasBuracos++;
         }
         else
             A->knowledgeBase[A->onde->row][A->onde->col].buraco = false;
@@ -64,6 +72,7 @@ bool move(agent* A, enviroment E, place* target){
         }
         if (A->comOuro && A->onde->row==E.h-1 && A->onde->col==E.w-1){
             printf("Escapou com o ouro! Parabéns. \n");
+            A->ganhou = true;
         }
         return true;
     }

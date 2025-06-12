@@ -9,6 +9,8 @@ typedef struct {
     bool cheiro;
     bool monstro;
     bool buraco;
+    bool possivelBuraco;
+    bool possivelMonstro;
 } knowledge;
 
 typedef struct {
@@ -17,6 +19,10 @@ typedef struct {
     bool temFlecha;
     int score;
     knowledge ** knowledgeBase;
+    bool ganhou;
+    int quedasBuracos;
+    int matouMonstro;
+    int contatoMonstro;
 }agent;
 
 void printSimulation(agent A, enviroment E);
